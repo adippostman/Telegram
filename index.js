@@ -54,7 +54,7 @@ bot.start(async (ctx) => {
 });
 
 bot.action(`getCryptoPrice`, async (ctx) => {
-  const price = await getPrice();
+  const price = getPrice();
   const arrow =
     parseInt(price.lastPrice) - parseInt(price.prevClosePrice) < 0
       ? `🔴`
@@ -62,7 +62,7 @@ bot.action(`getCryptoPrice`, async (ctx) => {
   const messages = `Harga Cryptocurrencies saat ini diambil dari data <b>Binance API</b>\n\n${arrow} ${
     price.priceChangePercent
   }% | ${price.symbol} | $${parseFloat(price.lastPrice).toFixed(2)} USDT`;
-  ctx.sendMessage(messages, {
+  await ctx.sendMessage(messages, {
     parse_mode: `HTML`,
   });
 });
