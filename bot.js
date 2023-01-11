@@ -3,7 +3,7 @@ require(`dotenv`).config();
 
 // init bot
 const bot = new teleBot(process.env.BOT_TOKEN, { polling: true });
-bot.useState = {};
+bot.useState = { author: `Adip Perdana` };
 
 (async () => {
   try {
@@ -40,14 +40,21 @@ bot.useState = {};
     );
 
     // save message_id for delete chat
-    bot.useState[chatId] = {
-      chatId: learn.chat.id,
-      messageId: learn.message_id,
+    // let state = { author: `Adip Perdana` };
+    let data = {
+      [learn.chat.id]: {
+        chatId: learn.chat.id,
+        messageId: learn.message_id,
+      },
     };
+
+    let newState = { ...bot.useState, ...data };
+    bot.useState = newState;
   });
 
   bot.on(`callback_query`, async (query) => {
     if (query.data == `getCryptoPrice`) {
+      console.log(bot.useState);
       await bot.deleteMessage(
         bot.useState[query.message.chat.id].chatId,
         bot.useState[query.message.chat.id].messageId
